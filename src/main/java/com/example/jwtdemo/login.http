@@ -1,0 +1,11 @@
+@baseUrl = localhost:8080/api
+@accessToken = eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiI2MDM0ZTZmNS1kMzdjLTRjMmUtYjY5OS1hNzMzZjczMjg1YmMiLCJpc3MiOiJqd3QtZGVtbyIsInN1YiI6InVzZXIiLCJ0eXBlIjoiYWNjZXNzIiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImlhdCI6MTc5MjQ5NzAxMSwiZXhwIjoxNzkyNDk3OTExfQ.PiL-eo6bkSWH7IYZ2-0-hEZJ9Pj8nxNvdeHIq-izL3LTnoILbeGEKHAzF_HYiR1h
+@refreshToken = eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiJmNWJlZmIyYy00MTIyLTQ5NjgtOTEzOC02MDZmNDE0ZTY3MDQiLCJpc3MiOiJqd3QtZGVtbyIsInN1YiI6InVzZXIiLCJ0eXBlIjoicmVmcmVzaCIsImlhdCI6MTc5MjQ5NzAxMSwiZXhwIjoxNzkzMTAxODExfQ.BRzWEimyvkl5ROD1S86o2JJRJo7lY5KwPhW7t_OtkEe9Wi_HECuavplnMQG6G1SS
+
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "username":"user",
+  "password":"password"
+}

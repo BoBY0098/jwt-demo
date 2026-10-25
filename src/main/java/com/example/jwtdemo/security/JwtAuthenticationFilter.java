@@ -23,14 +23,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final String PREFIX = "Bearer ";
 
     private final JwtService jwtService;
+    private final TokenCacheService tokenCacheService;
 
-    public JwtAuthenticationFilter(JwtService jwtService) {
+    public JwtAuthenticationFilter(JwtService jwtService, TokenCacheService tokenCacheService) {
         this.jwtService = jwtService;
+        this.tokenCacheService = tokenCacheService;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
+
+        redisValidation(request, response);
 
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (header == null || !header.startsWith(PREFIX)) {
@@ -57,5 +61,34 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         chain.doFilter(request, response);
+    }
+
+    private String extractToken(HttpServletRequest request) {
+        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+
+        if (header == null || !header.startsWith(PREFIX)) {
+            return null;
+        }
+
+        return header.substring(PREFIX.length()).trim();
+    }
+
+    private void redisValidation(HttpServletRequest request, HttpServletResponse response) {
+        String token = extractToken(request);
+        if (token != null) {
+            // 1. Check blacklist first
+            if (tokenCacheService.isTokenBlacklisted(token)) {
+                // reject the request
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
+
+            // 2. Optionally check if the token still exists in the "valid" set
+            // (useful if you want server-side session control)
+            if (!tokenCacheService.isTokenValid(token)) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
+        }
     }
 }

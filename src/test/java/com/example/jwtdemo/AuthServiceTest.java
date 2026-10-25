@@ -4,6 +4,7 @@ import com.example.jwtdemo.config.JwtProperties;
 import com.example.jwtdemo.security.AuthService;
 import com.example.jwtdemo.security.JwtService;
 import com.example.jwtdemo.security.RefreshTokenStore;
+import com.example.jwtdemo.security.TokenCacheService;
 import com.example.jwtdemo.web.TokenResponse;
 import io.jsonwebtoken.JwtException;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +24,7 @@ class AuthServiceTest {
     private JwtService jwtService;
     private RefreshTokenStore store;
     private AuthService authService;
+    private TokenCacheService tokenCacheService;
 
     @BeforeEach
     void setUp() {
@@ -34,7 +36,7 @@ class AuthServiceTest {
 
         authService = new AuthService(
                 auth -> new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()),
-                users, jwtService, store);
+                users, jwtService, store, tokenCacheService);
     }
 
     @Test

@@ -16,15 +16,17 @@ public class AuthService {
     private final UserDetailsService userDetailsService;
     private final JwtService jwtService;
     private final RefreshTokenStore refreshTokenStore;
+    private final TokenCacheService tokenCacheService;
 
     public AuthService(AuthenticationManager authenticationManager,
                        UserDetailsService userDetailsService,
                        JwtService jwtService,
-                       RefreshTokenStore refreshTokenStore) {
+                       RefreshTokenStore refreshTokenStore, TokenCacheService tokenCacheService) {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.jwtService = jwtService;
         this.refreshTokenStore = refreshTokenStore;
+        this.tokenCacheService = tokenCacheService;
     }
 
     /** Checks username/password and issues an access + refresh token pair. */
@@ -59,7 +61,8 @@ public class AuthService {
     public void logout(String refreshToken) {
         try {
             Claims claims = jwtService.parseRefreshToken(refreshToken);
-            refreshTokenStore.consume(claims.getId());
+            refreshTokenStore.consume(claims.getId()); // In-Memory way
+            tokenCacheService.removeToken(claims.getId()); // Redis
         } catch (JwtException | IllegalArgumentException ignored) {
             // nothing to revoke
         }
@@ -69,9 +72,14 @@ public class AuthService {
         String access = jwtService.generateAccessToken(user);
         IssuedToken refresh = jwtService.generateRefreshToken(user);
         refreshTokenStore.save(refresh.jti(), user.getUsername(), refresh.expiresAt());
-
+        redisTokenStore(refresh.token(), refresh.expiresAt().getEpochSecond());
         return new TokenResponse(access, refresh.token(), "Bearer",
                 jwtService.getAccessTokenExpirationSeconds(),
                 jwtService.getRefreshTokenExpirationSeconds());
+    }
+
+    private void redisTokenStore(String refreshToken, Long expiresInSeconds) {
+        // Store the token in Redis with the same expiration as the JWT
+        tokenCacheService.storeToken(refreshToken, expiresInSeconds);
     }
 }

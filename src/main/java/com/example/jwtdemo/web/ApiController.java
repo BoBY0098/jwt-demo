@@ -2,6 +2,7 @@ package com.example.jwtdemo.web;
 
 import com.example.jwtdemo.security.JwtService;
 import io.jsonwebtoken.Claims;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -13,6 +14,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
+@Tag(name = "API", description = "Account info API's")
 public class ApiController {
 
     private final JwtService jwtService;

@@ -1,0 +1,7 @@
+### Logout
+POST http://localhost:8080/api/auth/logout
+Content-Type: application/json
+
+{
+  "refreshToken": "eyJhbGciOiJIUzM4NCJ9.eyJqdGkiOiIyMWI4OTRmYi1kMDJkLTQxMzEtOWRkMS04OTAxOTc4NDRjNjgiLCJpc3MiOiJqd3QtZGVtbyIsInN1YiI6InVzZXIiLCJ0eXBlIjoicmVmcmVzaCIsImlhdCI6MTc5MjkyMTY0MywiZXhwIjoxNzkzNTI2NDQzfQ.fHCGNYWuSsaMZJtOM14IdtGz-qxEXaHjyTdRlL0HN3cmCun4nCQpTW0ekzUYK7mA"
+}

@@ -1,6 +1,21 @@
+#JWT Configuration
 jwt:
   # Base64-encoded HMAC key, must be >= 256 bits. In production inject via env var / secret manager.
   secret: ${JWT_SECRET:pU+WZqWgp4+vmBtuLyu/nTPn5e3bJruE5pMg6pI71ZxDTTli7jPfAoMFuEVfOHCZ}
   issuer: jwt-demo
   access-token-expiration-ms: 900000   # 15 minutes
   refresh-token-expiration-ms: 604800000   # 7 days
+
+#Redis Configuration
+spring:
+  data:
+    redis:
+      host: localhost          # change if Redis is remote
+      port: 6379
+      password:                # leave empty if no password
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0

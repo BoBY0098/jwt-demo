@@ -3,6 +3,7 @@ package com.example.jwtdemo.config;
 import com.example.jwtdemo.security.JwtAuthenticationEntryPoint;
 import com.example.jwtdemo.security.JwtAuthenticationFilter;
 import com.example.jwtdemo.security.JwtService;
+import com.example.jwtdemo.security.TokenCacheService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,7 +24,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http, JwtService jwtService,
+    SecurityFilterChain filterChain(HttpSecurity http, JwtService jwtService, TokenCacheService tokenCacheService,
                                     JwtAuthenticationEntryPoint entryPoint) throws Exception {
         http
             .csrf(csrf -> csrf.disable())   // stateless API, no cookies
@@ -33,7 +34,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated())
             .exceptionHandling(e -> e.authenticationEntryPoint(entryPoint))
-            .addFilterBefore(new JwtAuthenticationFilter(jwtService), UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(new JwtAuthenticationFilter(jwtService, tokenCacheService), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

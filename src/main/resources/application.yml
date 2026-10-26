@@ -24,3 +24,10 @@ spring:
           max-active: 8
           max-idle: 8
           min-idle: 0
+
+#Log Configuration
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} [correlationId=%X{correlationId}] - %msg%n"
+  level:
+    com.example.jwtdemo: DEBUG

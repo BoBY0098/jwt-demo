@@ -1,0 +1,64 @@
+-------------------------------------------------------------------------------
+Test set: com.example.jwtdemo.AuthServiceTest
+-------------------------------------------------------------------------------
+Tests run: 6, Failures: 0, Errors: 6, Skipped: 0, Time elapsed: 0.207 s <<< FAILURE! -- in com.example.jwtdemo.AuthServiceTest
+com.example.jwtdemo.AuthServiceTest.refreshRotatesTheRefreshToken -- Time elapsed: 0.185 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "com.example.jwtdemo.security.TokenCacheService.storeToken(String, long)" because "this.tokenCacheService" is null
+	at com.example.jwtdemo.security.AuthService.redisTokenStore(AuthService.java:83)
+	at com.example.jwtdemo.security.AuthService.issueTokens(AuthService.java:75)
+	at com.example.jwtdemo.security.AuthService.login(AuthService.java:36)
+	at com.example.jwtdemo.AuthServiceTest.refreshRotatesTheRefreshToken(AuthServiceTest.java:53)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+com.example.jwtdemo.AuthServiceTest.loginReturnsAccessAndRefreshToken -- Time elapsed: 0.002 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "com.example.jwtdemo.security.TokenCacheService.storeToken(String, long)" because "this.tokenCacheService" is null
+	at com.example.jwtdemo.security.AuthService.redisTokenStore(AuthService.java:83)
+	at com.example.jwtdemo.security.AuthService.issueTokens(AuthService.java:75)
+	at com.example.jwtdemo.security.AuthService.login(AuthService.java:36)
+	at com.example.jwtdemo.AuthServiceTest.loginReturnsAccessAndRefreshToken(AuthServiceTest.java:44)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+com.example.jwtdemo.AuthServiceTest.usedRefreshTokenCannotBeUsedAgain -- Time elapsed: 0.002 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "com.example.jwtdemo.security.TokenCacheService.storeToken(String, long)" because "this.tokenCacheService" is null
+	at com.example.jwtdemo.security.AuthService.redisTokenStore(AuthService.java:83)
+	at com.example.jwtdemo.security.AuthService.issueTokens(AuthService.java:75)
+	at com.example.jwtdemo.security.AuthService.login(AuthService.java:36)
+	at com.example.jwtdemo.AuthServiceTest.usedRefreshTokenCannotBeUsedAgain(AuthServiceTest.java:65)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+com.example.jwtdemo.AuthServiceTest.accessTokenCannotBeUsedToRefresh -- Time elapsed: 0.002 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "com.example.jwtdemo.security.TokenCacheService.storeToken(String, long)" because "this.tokenCacheService" is null
+	at com.example.jwtdemo.security.AuthService.redisTokenStore(AuthService.java:83)
+	at com.example.jwtdemo.security.AuthService.issueTokens(AuthService.java:75)
+	at com.example.jwtdemo.security.AuthService.login(AuthService.java:36)
+	at com.example.jwtdemo.AuthServiceTest.accessTokenCannotBeUsedToRefresh(AuthServiceTest.java:91)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+com.example.jwtdemo.AuthServiceTest.logoutRevokesRefreshToken -- Time elapsed: 0.001 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "com.example.jwtdemo.security.TokenCacheService.storeToken(String, long)" because "this.tokenCacheService" is null
+	at com.example.jwtdemo.security.AuthService.redisTokenStore(AuthService.java:83)
+	at com.example.jwtdemo.security.AuthService.issueTokens(AuthService.java:75)
+	at com.example.jwtdemo.security.AuthService.login(AuthService.java:36)
+	at com.example.jwtdemo.AuthServiceTest.logoutRevokesRefreshToken(AuthServiceTest.java:84)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+com.example.jwtdemo.AuthServiceTest.reuseOfOldRefreshTokenRevokesTheWholeFamily -- Time elapsed: 0.001 s <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "com.example.jwtdemo.security.TokenCacheService.storeToken(String, long)" because "this.tokenCacheService" is null
+	at com.example.jwtdemo.security.AuthService.redisTokenStore(AuthService.java:83)
+	at com.example.jwtdemo.security.AuthService.issueTokens(AuthService.java:75)
+	at com.example.jwtdemo.security.AuthService.login(AuthService.java:36)
+	at com.example.jwtdemo.AuthServiceTest.reuseOfOldRefreshTokenRevokesTheWholeFamily(AuthServiceTest.java:72)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+

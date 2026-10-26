@@ -5,6 +5,8 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -21,6 +23,8 @@ import java.util.Map;
 @Tag(name = "Auth", description = "API's for Authentication")
 public class AuthController {
 
+    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
+
     private final AuthService authService;
 
     public AuthController(AuthService authService) {
@@ -30,7 +34,10 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
         try {
-            return ResponseEntity.ok(authService.login(request.username(), request.password()));
+            log.info("Login attempt for user={}", request.username());
+            TokenResponse response = authService.login(request.username(), request.password());
+            log.info("Login successful for user={}", request.username());
+            return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {
             return unauthorized("Bad username or password");
         }

@@ -38,3 +38,31 @@ rate-limit:
   enabled: true
   max-requests: 10          # max requests
   window-seconds: 60        # per this many seconds
+
+# Resilience4j Configuration
+resilience4j:
+  circuitbreaker:
+    instances:
+      externalService:                    # name you will use in @CircuitBreaker
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 10s
+        failureRateThreshold: 50          # open circuit if 50% of calls fail
+        slowCallRateThreshold: 50
+        slowCallDurationThreshold: 2s     # calls slower than 2s are considered slow
+
+  retry:
+    instances:
+      externalService:
+        maxAttempts: 10
+        waitDuration: 4000ms               # base wait
+        enableExponentialBackoff: true
+        exponentialBackoffMultiplier: 2   # 500ms → 1s → 2s
+        retryExceptions:
+          - java.io.IOException
+          - java.net.SocketTimeoutException
+          - org.springframework.web.client.ResourceAccessException
+        ignoreExceptions:

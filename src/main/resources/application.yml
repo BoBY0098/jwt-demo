@@ -31,3 +31,10 @@ logging:
     console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} [correlationId=%X{correlationId}] - %msg%n"
   level:
     com.example.jwtdemo: DEBUG
+
+
+# Rate Limiting
+rate-limit:
+  enabled: true
+  max-requests: 10          # max requests
+  window-seconds: 60        # per this many seconds

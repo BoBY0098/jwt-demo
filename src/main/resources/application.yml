@@ -11,13 +11,32 @@ jwt:
   access-token-expiration-ms: 900000   # 15 minutes
   refresh-token-expiration-ms: 604800000   # 7 days
 
-#Redis Configuration
+# DataSource + JPA + Redis
 spring:
+  datasource:
+    url: jdbc:h2:mem:jwtdemo;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true          # http://localhost:8084/h2-console
+      path: /h2-console
+
+  jpa:
+    hibernate:
+      ddl-auto: update       # create tables automatically (use 'validate' in prod)
+    show-sql: true           # log every SQL – great for learning N+1
+    properties:
+      hibernate:
+        format_sql: true
+
   data:
     redis:
-      host: localhost          # change if Redis is remote
+      host: localhost
       port: 6379
-      password:                # leave empty if no password
+      password:
       timeout: 2000ms
       lettuce:
         pool:
@@ -31,38 +50,38 @@ logging:
     console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} [correlationId=%X{correlationId}] - %msg%n"
   level:
     com.example.jwtdemo: DEBUG
-
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE   # shows parameter values – gold for learning
 
 # Rate Limiting
 rate-limit:
   enabled: true
-  max-requests: 10          # max requests
-  window-seconds: 60        # per this many seconds
+  max-requests: 10
+  window-seconds: 60
 
 # Resilience4j Configuration
 resilience4j:
   circuitbreaker:
     instances:
-      externalService:                    # name you will use in @CircuitBreaker
+      externalService:
         registerHealthIndicator: true
         slidingWindowSize: 10
         minimumNumberOfCalls: 5
         permittedNumberOfCallsInHalfOpenState: 3
         automaticTransitionFromOpenToHalfOpenEnabled: true
         waitDurationInOpenState: 10s
-        failureRateThreshold: 50          # open circuit if 50% of calls fail
+        failureRateThreshold: 50
         slowCallRateThreshold: 50
-        slowCallDurationThreshold: 2s     # calls slower than 2s are considered slow
+        slowCallDurationThreshold: 2s
 
   retry:
     instances:
       externalService:
         maxAttempts: 10
-        waitDuration: 4000ms               # base wait
+        waitDuration: 4000ms
         enableExponentialBackoff: true
-        exponentialBackoffMultiplier: 2   # 500ms → 1s → 2s
+        exponentialBackoffMultiplier: 2
         retryExceptions:
           - java.io.IOException
           - java.net.SocketTimeoutException
           - org.springframework.web.client.ResourceAccessException
-        ignoreExceptions:

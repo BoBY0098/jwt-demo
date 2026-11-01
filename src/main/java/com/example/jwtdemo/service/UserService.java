@@ -11,16 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-/**
- * Application service for user management.
- *
- * Rules of thumb for @Transactional:
- * 1. Put it on the service layer (not on repositories or controllers).
- * 2. Use readOnly = true for pure read methods → performance + clarity.
- * 3. One business use-case = one transactional method.
- * 4. Never catch-and-ignore exceptions inside a @Transactional method
- *    if you still want the transaction to roll back.
- */
+
 @Service
 public class UserService {
 
@@ -36,28 +27,18 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    /**
-     * Read-only method – Hibernate skips dirty checking.
-     * Uses the JOIN FETCH query → only 1 SQL statement even though we touch roles.
-     */
+
     @Transactional(readOnly = true)
     public List<UserEntity> findAllUsersWithRoles() {
         return userRepository.findAllWithRoles();
     }
 
-    /**
-     * Another read-only example.
-     */
     @Transactional(readOnly = true)
     public UserEntity findByUsername(String username) {
         return userRepository.findByUsernameWithRoles(username)
                 .orElseThrow(() -> new IllegalArgumentException("User not found: " + username));
     }
 
-    /**
-     * Write method – default @Transactional (readOnly=false).
-     * If any exception propagates, the whole transaction rolls back.
-     */
     @Transactional
     public UserEntity register(String username, String rawPassword, String email) {
         if (userRepository.existsByUsername(username)) {
@@ -79,9 +60,6 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    /**
-     * Change profile status – classic write use-case.
-     */
     @Transactional
     public void changeProfileStatus(String username, ProfileStatus newStatus) {
         UserEntity user = userRepository.findByUsername(username)

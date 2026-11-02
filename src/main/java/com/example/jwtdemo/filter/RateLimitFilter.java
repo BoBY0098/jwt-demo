@@ -43,12 +43,15 @@ public class RateLimitFilter extends OncePerRequestFilter {
         // Skip if it's disable
         if (!properties.isEnabled()) {
             filterChain.doFilter(request, response);
+            return;
         }
 
         // Skip swagger & actuator
         String path = request.getRequestURI();
-        if (path.startsWith("/swagger-ui") || path.startsWith("/v3/api-docs") || path.startsWith("/webjars")) {
+        if (path.startsWith("/swagger-ui") || path.startsWith("/v3/api-docs") || path.startsWith("/webjars")
+                || path.startsWith("/h2-console") || path.contains("/h2-console/")) {
             filterChain.doFilter(request, response);
+            return;
         }
 
         String key = buildKey(request);
